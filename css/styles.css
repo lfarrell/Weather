@@ -1,0 +1,49 @@
+body {
+    background-color: lightslategray;
+    font-family: 'Roboto', sans-serif;
+    color: whitesmoke;
+}
+
+.center {
+    text-align: center;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    padding: 5px;
+    stroke: whitesmoke;
+    shape-rendering: crispEdges;
+}
+
+text {
+    stroke: whitesmoke;
+    fill: whitesmoke;
+}
+
+.temp_lines {
+    fill: none;
+    stroke: lightgray;
+    stroke-width: 1;
+}
+
+div.tooltip {
+    position: absolute;
+    text-align: left;
+    width: auto;
+    height: auto;
+    padding: 5px;
+    fill: black;
+    background: black;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+select {
+    color: black;
+}
+
+#load {
+    font-size: 4em;
+}
