@@ -2,7 +2,7 @@
 $months = range(1,12);
 
 // All states temp & precip
-/*$state_list = array(
+$state_list = array(
     'AL' => 1,
     'AK' => 50,
     'AZ' => 2,
@@ -105,7 +105,7 @@ foreach($months as $month) {
     }
 
     echo $month . " processed\n";
-} */
+}
 
 // Aggregate Files
 function build($path, $states, $fh) {
