@@ -1,7 +1,6 @@
 body {
-    background-color: lightslategray;
+    background-color: white;
     font-family: 'Roboto', sans-serif;
-    color: whitesmoke;
 }
 
 .center {
@@ -12,13 +11,8 @@ body {
 .axis line {
     fill: none;
     padding: 5px;
-    stroke: whitesmoke;
     shape-rendering: crispEdges;
-}
-
-text {
-    stroke: whitesmoke;
-    fill: whitesmoke;
+    stroke: black;
 }
 
 .temp_lines {
