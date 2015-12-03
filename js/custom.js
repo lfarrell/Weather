@@ -31,12 +31,7 @@ d3.csv('../us_temp_all.csv', function(data) {
 
     var line_count = lineCount(filtered_groups);
 
-    filtered_groups.forEach(function(d) {
-        var anomaly_list =_.pluck(d.values, 'anomaly');
-        var anomaly_total =  _.reduce(anomaly_list, function(memo, num){ return memo + num; }, 0);
-
-        d.anomaly_avg = (anomaly_total / (d.values.length)).toFixed(1);
-    });
+    filtered_groups = avg_anomalies(filtered_groups);
 
     var xScale = d3.time.scale()
         .domain(d3.extent(filtered, function(d) { return parse_date(d.month); }))
@@ -166,6 +161,8 @@ d3.csv('../us_temp_all.csv', function(data) {
             .key(function(d) { return d.year; })
             .entries(new_filtered);
 
+        filtered_groups = avg_anomalies(filtered_groups);
+
         xScale.domain(d3.extent(new_filtered, function(d) { return parse_date(d.month); }));
         yScale.domain(d3.extent(new_filtered, function(d) { return d.anomaly; }).reverse());
 
@@ -220,4 +217,15 @@ function lineCount(values) {
 
 function line_id(id) {
     return id.split('_')[1];
+}
+
+function avg_anomalies(filtered_groups) {
+    filtered_groups.forEach(function(d) {
+        var anomaly_list =_.pluck(d.values, 'anomaly');
+        var anomaly_total =  _.reduce(anomaly_list, function(memo, num){ return memo + num; }, 0);
+
+        d.anomaly_avg = (anomaly_total / (d.values.length)).toFixed(1);
+    });
+
+    return filtered_groups;
 }
