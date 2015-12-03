@@ -125,7 +125,7 @@ d3.csv('../us_temp_all.csv', function(data) {
                             "<li>Nov: " + nov +"</li>" +
                             "<li>Dec: " +  dec +"</li>" +
                         "</ul>")
-                    .style("top", (d3.event.pageY-28)+"px")
+                    .style("top", (d3.event.pageY-58)+"px")
                     .style("left", (d3.event.pageX-28)+"px");
 
 
