@@ -125,7 +125,7 @@ d3.csv('../us_temp_all.csv', function(data) {
                             "<li>Nov: " + nov +"</li>" +
                             "<li>Dec: " +  dec +"</li>" +
                         "</ul>")
-                    .style("top", (d3.event.pageY-58)+"px")
+                    .style("top", (d3.event.pageY-108)+"px")
                     .style("left", (d3.event.pageX-28)+"px");
 
 
@@ -133,7 +133,6 @@ d3.csv('../us_temp_all.csv', function(data) {
             .on("mouseout", function(d) {
                 var self = d3.select(this);
                 var line_value = line_id(self.attr('id'));
-                console.log(self.attr('id'))
 
                 self.style('stroke', function(d) {
                     if(line_value >= (line_count - 11)) {
