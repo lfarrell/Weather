@@ -8,7 +8,7 @@
     <title>US Temperatures</title>
     <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
 <div class="container-fluid">
@@ -19,20 +19,21 @@
         <h2 class="center">Is Your State Warming?</h2>
         <div class="col-sm-12 col-lg-offset-1 col-lg-10">
             <p>Climate change doesn't mean it's always hot outside, or that the world will warm uniformly.
-                Notice that though the world hasn't had a below average monthly temperature since 1984.
                 The average temperature of the United States was below 20th century historical averages as
-                recently as February 2015. Also note, there is much less variability in world temperatures
-                compared to US temperatures.</p>
+                recently as February 2015. You can use the following visualization to check the temperature
+            anomaly levels for the contiguous United States or the state you live in. Data ranges from 1895 to 2014. Years
+            marked in red are the ten most recent years. Years marked in orange are the ten hottest years on record. Hover ovar a
+                line to see data for that year. (Note: does not include Alaska or Hawaii.)</p>
         </div>
     </div>
     <div class="row hide">
         <div class="col-sm-12 col-lg-12" id="us_heat">
-            <div class="col-sm-5 col-lg-3">
+            <div class="col-sm-offset-2 col-sm-5 col-lg-offset-1 col-lg-3">
                 <select id="state" name="state" class="form-control">
                     <option value="">--Select Area--</option>
                     <option value="US">Contiguous U.S.</option>
                     <option value="AL">Alabama</option>
-                    <option value="AK">Alaska</option>
+                 <!--   <option value="AK">Alaska</option> -->
                     <option value="AZ">Arizona</option>
                     <option value="AR">Arkansas</option>
                     <option value="CA">California</option>
@@ -41,7 +42,7 @@
                     <option value="DE">Delaware</option>
                     <option value="FL">Florida</option>
                     <option value="GA">Georgia</option>
-                    <option value="HI">Hawaii</option>
+                  <!--  <option value="HI">Hawaii</option> -->
                     <option value="ID">Idaho</option>
                     <option value="IL">Illinois</option>
                     <option value="IN">Indiana</option>
@@ -83,9 +84,12 @@
                     <option value="WY">Wyoming</option>
                 </select>
             </div>
-            <div class="col-lg-1">
-                <p id="year_name" style="font-size: 14px"></p>
-            </div>
+           <!-- <div class="col-sm-6 col-lg-5">
+                <div class="btn-group" role="group" aria-label="most recent/hottest year buttons">
+                    <button id="recent" type="button" class="btn btn-default">Ten Most Recent Years</button>
+                    <button id="hot" type="button" class="btn btn-default">Ten Hottest Years</button>
+                </div>
+            </div> -->
         </div>
     </div>
     <div class="row hide">
@@ -98,7 +102,7 @@
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.js" charset="utf-8"></script>
-<script src="js/custom.js"></script>
+<script src="../js/custom.js"></script>
 <script type="text/javascript">
  /*   var _gaq = _gaq || [];
     _gaq.push(['_setAccount', 'UA-47256145-1']);

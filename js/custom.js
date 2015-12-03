@@ -1,10 +1,14 @@
-d3.csv('us_temp_all.csv', function(data) {
+d3.csv('../us_temp_all.csv', function(data) {
     data.forEach(function(d) {
         d.value = +d.value;
         d.anomaly = +d.anomaly;
     });
 
-    var margins = { top: 20, right: 75, left: 50, bottom: 75 },
+    var div = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+    var margins = { top: 20, right: 25, left: 50, bottom: 75 },
         parse_date = d3.time.format("%m").parse,
         sorted = _.sortByOrder(data, ['state','year', 'month'], ['asc', 'asc', 'asc']),
         selected_state = 'US';
@@ -37,10 +41,6 @@ d3.csv('us_temp_all.csv', function(data) {
     var xScale = d3.time.scale()
         .domain(d3.extent(filtered, function(d) { return parse_date(d.month); }))
         .range([0, width]);
-
-            /*var xScale = d3.scale.ordinal()
-             .domain(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'])
-             .range([0, width]);*/
 
     var yScale = d3.scale.linear()
          .domain(d3.extent(filtered, function(d) { return d.anomaly; }).reverse())
@@ -103,12 +103,42 @@ d3.csv('us_temp_all.csv', function(data) {
                 self.style('stroke', 'slategray')
                     .style('stroke-width', 3);
 
-                d3.select("#year_name").text(filtered_groups[line_value].values[0].year +
-                    ' ' + filtered_groups[line_value].values[0].anomaly);
+                div.transition()
+                    .duration(200)
+                    .style("opacity", .9);
+
+                var nov = (filtered_groups[line_value].values[10].anomaly !== undefined) ?
+                    filtered_groups[line_value].values[10].anomaly : "N/A";
+                var dec = (filtered_groups[line_value].values[11].anomaly) !== undefined ?
+                    filtered_groups[line_value].values[11].anomaly : "N/A";
+
+                div.html(
+                        "<h5 class='center'>" + filtered_groups[line_value].values[0].year +"</h5>" +
+                        "<p class='center'>Temp Anomalies in Degrees<br/> Fahrenheit</p>" +
+                        "<p class='center'>Avg. Temp Anomaly: " + filtered_groups[line_value].anomaly_avg + "</p>" +
+                        "<ul class='columns'>" +
+                            "<li>Jan: " +  filtered_groups[line_value].values[0].anomaly +"</li>" +
+                            "<li>Feb: " +  filtered_groups[line_value].values[1].anomaly +"</li>" +
+                            "<li>Mar: " +  filtered_groups[line_value].values[2].anomaly +"</li>" +
+                            "<li>Apr: " +  filtered_groups[line_value].values[3].anomaly +"</li>" +
+                            "<li>May: " +  filtered_groups[line_value].values[4].anomaly +"</li>" +
+                            "<li>Jun: " +  filtered_groups[line_value].values[5].anomaly +"</li>" +
+                            "<li>Jul: " +  filtered_groups[line_value].values[6].anomaly +"</li>" +
+                            "<li>Aug: " +  filtered_groups[line_value].values[7].anomaly +"</li>" +
+                            "<li>Sep: " +  filtered_groups[line_value].values[8].anomaly +"</li>" +
+                            "<li>Oct: " +  filtered_groups[line_value].values[9].anomaly +"</li>" +
+                            "<li>Nov: " + nov +"</li>" +
+                            "<li>Dec: " +  dec +"</li>" +
+                        "</ul>")
+                    .style("top", (d3.event.pageY-28)+"px")
+                    .style("left", (d3.event.pageX-28)+"px");
+
+
             })
             .on("mouseout", function(d) {
                 var self = d3.select(this);
                 var line_value = line_id(self.attr('id'));
+                console.log(self.attr('id'))
 
                 self.style('stroke', function(d) {
                     if(line_value >= (line_count - 11)) {
@@ -116,9 +146,11 @@ d3.csv('us_temp_all.csv', function(data) {
                     } else {
                         return 'lightgray';
                     }
-                }).style('stroke-width', 1);
+                }).style('stroke-width', 1.5);
 
-                d3.select("#year_name").text('');
+                div.transition()
+                    .duration(500)
+                    .style("opacity", 0);
             });
     }
 
@@ -150,6 +182,33 @@ d3.csv('us_temp_all.csv', function(data) {
         d3.select("#selected_state").text(selected_state_name);
         state.property("value", "");
     });
+
+ /*   d3.select("#recent").on('click', function(d) {
+        for(var i=0; i<line_count; i++) {
+            d3.select("#year_" + i).transition().duration(800)
+                .style('stroke', function(d) {
+                if(i >= (line_count - 11)) {
+                    return 'red';
+                } else {
+                    return 'lightgray';
+                }
+            });
+        }
+    });
+
+    d3.select("#hot").on('click', function(d) {
+        var top = _.pluck()
+        for(var i=0; i<line_count; i++) {
+            d3.select("#year_" + i).transition().duration(800)
+                .style('stroke', function(d) {
+                    if(i >= (line_count - 11)) {
+                        return 'orange';
+                    } else {
+                        return 'lightgray';
+                    }
+                });
+        }
+    }); */
 
     d3.selectAll('.row').classed('hide', false);
     d3.select('#note').classed('hide', true);

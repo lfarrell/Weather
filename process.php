@@ -54,7 +54,7 @@ $state_list = array(
     'WI' => 47,
     'WY' => 48
 );
-
+/*
 foreach($state_list as $state => $code) {
     foreach($months as $month) {
         if($month < 10) { $month = "0" . $month; }
@@ -106,7 +106,7 @@ foreach($months as $month) {
 
     echo $month . " processed\n";
 }
-
+*/
 // Aggregate Files
 function build($path, $states, $fh) {
     foreach($states as $state_file) {
@@ -119,7 +119,10 @@ function build($path, $states, $fh) {
                     $data[0] = $year;
                     $data[3] = $month;
                     $data[4] = $state_name;
-                    fputcsv($fh, $data);
+
+                    if($year != 2015) {
+                        fputcsv($fh, $data);
+                    }
                 }
             }
             fclose($handle);
