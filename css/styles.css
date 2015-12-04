@@ -18,7 +18,7 @@ body {
 .temp_lines {
     fill: none;
     stroke: lightgray;
-    stroke-width: 1.5;
+    stroke-width: 2;
 }
 
 div.tooltip {
@@ -48,4 +48,18 @@ select {
 
 #load {
     font-size: 4em;
+}
+
+h4 {
+    font-weight: bold;
+}
+
+h4.center {
+    margin-top: 25px;
+}
+
+#works li {
+    display: inline;
+    font-size:  1.2em;
+    padding-left: 25px;
 }
