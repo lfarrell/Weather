@@ -94,8 +94,12 @@
     </div>
     <div class="row hide">
         <div id="temps_div" class="col-sm-12 col-lg-12">
-            <h2 class="center">Selected Area: <span id="selected_state">Contiguous U.S.</span></h2>
+            <h2 class="center">Selected Area: <span class="selected_state">Contiguous U.S.</span></h2>
             <svg id="avg_temps"></svg>
+        </div>
+        <div id="decades_div" class="col-sm-12 col-lg-12">
+            <h2 class="center">Average Anomaly by Decade (<span class="selected_state">Contiguous U.S.</span>)</h2>
+            <svg id="avg_temps_decade"></svg>
         </div>
         <div id="data-source" class="col-sm-12 col-lg-12">Data courtesy of <a href="http://www.ncdc.noaa.gov/cag/time-series/us/">NOAA</a></div>
         <div class="col-offset-lg-2 col-offset-sm-1">
@@ -108,7 +112,7 @@
     </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.min.js" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.9/d3.js" charset="utf-8"></script>
 <script src="../js/custom.js"></script>
 <script type="text/javascript">
     var _gaq = _gaq || [];

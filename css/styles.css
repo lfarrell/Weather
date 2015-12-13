@@ -15,7 +15,7 @@ body {
     stroke: black;
 }
 
-.temp_lines {
+.temp_lines, .decade_lines {
     fill: none;
     stroke: lightgray;
     stroke-width: 2;
@@ -62,4 +62,40 @@ h4.center {
     display: inline;
     font-size:  1.2em;
     padding-left: 25px;
+}
+/* scrolling */
+#sections > div{
+    opacity: .3
+}
+
+#sections div.graph-scroll-active{
+    opacity: 1;
+}
+
+#container{
+    position: relative;
+    overflow: auto;
+}
+
+#sections{
+    width: 200px;
+    float: left;
+}
+
+#graph{
+    width: 600px;
+    float: left;
+    margin-left: 40px;
+}
+
+#graph.graph-scroll-fixed{
+    position: fixed;
+    top: 0px;
+    margin-left: 240px;
+}
+
+#graph.graph-scroll-below{
+    position: absolute;
+    bottom: 0px;
+    margin-left: 240px;
 }
