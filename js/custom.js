@@ -28,6 +28,7 @@ d3.csv('../us_temp_all.csv', function(data) {
     var line_count = lineCount(decade_array);
 
     decade_array = avg_anomalies(decade_array);
+    var decade_arrays = decade_array;
 
     var xScale = d3.time.scale()
         .domain(d3.extent(filtered, function(d) { return parse_date(d.month); }))
@@ -76,33 +77,31 @@ d3.csv('../us_temp_all.csv', function(data) {
                     .duration(200)
                     .style("opacity", .9);
 
-                var nov = (decade_array[line_value].values[10].anomaly !== undefined) ?
-                    decade_array[line_value].values[10].anomaly : "N/A";
-                var dec = (decade_array[line_value].values[11].anomaly) !== undefined ?
-                    decade_array[line_value].values[11].anomaly : "N/A";
+                var nov = (decade_arrays[line_value].values[10].anomaly !== undefined) ?
+                    decade_arrays[line_value].values[10].anomaly : "N/A";
+                var dec = (decade_arrays[line_value].values[11].anomaly) !== undefined ?
+                    decade_arrays[line_value].values[11].anomaly : "N/A";
 
                 div.html(
-                        "<h5 class='center'>" + decade_array[line_value].values[0].year +"</h5>" +
+                        "<h5 class='center'>" + decade_arrays[line_value].values[0].year +"</h5>" +
                         "<p class='center'>Temp Anomalies in Degrees<br/> Fahrenheit</p>" +
-                        "<p class='center'>Avg. Temp Anomaly: " + decade_array[line_value].anomaly_avg + "</p>" +
+                        "<p class='center'>Avg. Temp Anomaly: " + decade_arrays[line_value].anomaly_avg + "</p>" +
                         "<ul class='columns'>" +
-                            "<li>Jan: " +  decade_array[line_value].values[0].anomaly +"</li>" +
-                            "<li>Feb: " +  decade_array[line_value].values[1].anomaly +"</li>" +
-                            "<li>Mar: " +  decade_array[line_value].values[2].anomaly +"</li>" +
-                            "<li>Apr: " +  decade_array[line_value].values[3].anomaly +"</li>" +
-                            "<li>May: " +  decade_array[line_value].values[4].anomaly +"</li>" +
-                            "<li>Jun: " +  decade_array[line_value].values[5].anomaly +"</li>" +
-                            "<li>Jul: " +  decade_array[line_value].values[6].anomaly +"</li>" +
-                            "<li>Aug: " +  decade_array[line_value].values[7].anomaly +"</li>" +
-                            "<li>Sep: " +  decade_array[line_value].values[8].anomaly +"</li>" +
-                            "<li>Oct: " +  decade_array[line_value].values[9].anomaly +"</li>" +
+                            "<li>Jan: " +  decade_arrays[line_value].values[0].anomaly +"</li>" +
+                            "<li>Feb: " +  decade_arrays[line_value].values[1].anomaly +"</li>" +
+                            "<li>Mar: " +  decade_arrays[line_value].values[2].anomaly +"</li>" +
+                            "<li>Apr: " +  decade_arrays[line_value].values[3].anomaly +"</li>" +
+                            "<li>May: " +  decade_arrays[line_value].values[4].anomaly +"</li>" +
+                            "<li>Jun: " +  decade_arrays[line_value].values[5].anomaly +"</li>" +
+                            "<li>Jul: " +  decade_arrays[line_value].values[6].anomaly +"</li>" +
+                            "<li>Aug: " +  decade_arrays[line_value].values[7].anomaly +"</li>" +
+                            "<li>Sep: " +  decade_arrays[line_value].values[8].anomaly +"</li>" +
+                            "<li>Oct: " +  decade_arrays[line_value].values[9].anomaly +"</li>" +
                             "<li>Nov: " + nov +"</li>" +
                             "<li>Dec: " +  dec +"</li>" +
                         "</ul>")
                     .style("top", (d3.event.pageY-108)+"px")
                     .style("left", (d3.event.pageX-28)+"px");
-
-
             })
             .on("mouseout", function(d) {
                 var self = d3.select(this);
@@ -171,13 +170,11 @@ d3.csv('../us_temp_all.csv', function(data) {
                             "<li>Aug: " +  decade_array[line_value].values[7].anomaly +"</li>" +
                             "<li>Sep: " +  decade_array[line_value].values[8].anomaly +"</li>" +
                             "<li>Oct: " +  decade_array[line_value].values[9].anomaly +"</li>" +
-                            "<li>Nov: " + decade_array[line_value].values[10].anomaly +"</li>" +
+                            "<li>Nov: " +  decade_array[line_value].values[10].anomaly +"</li>" +
                             "<li>Dec: " +  decade_array[line_value].values[11].anomaly +"</li>" +
                             "</ul>")
                     .style("top", (d3.event.pageY-108)+"px")
                     .style("left", (d3.event.pageX-28)+"px");
-
-
             })
             .on("mouseout", function(d) {
                 var self = d3.select(this);
