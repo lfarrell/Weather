@@ -209,7 +209,9 @@ d3.csv('../us_temp_all.csv', function(data) {
             .key(function(d) { return d.year; })
             .entries(new_filtered);
 
-        decade_array = avg_anomalies(decade_array);
+        decade_arrays = decade_array;
+
+        decade_arrays = avg_anomalies(decade_arrays);
         yScale.domain(d3.extent(new_filtered, function(d) { return d.anomaly; }).reverse());
 
         d3.select("#avg_temps g.y").transition().duration(1000).ease("sin-in-out").call(yAxis);
@@ -218,7 +220,7 @@ d3.csv('../us_temp_all.csv', function(data) {
             d3.select("#year_" + i).transition()
                 .duration(1400)
                 .ease("sin-in-out")
-                .attr("d", anomaly(decade_array[i].values));
+                .attr("d", anomaly(decade_arrays[i].values));
         }
 
         // Group by decade
