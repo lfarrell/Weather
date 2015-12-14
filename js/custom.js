@@ -24,7 +24,6 @@ d3.csv('../us_temp_all.csv', function(data) {
     var decade_array = d3.nest()
         .key(function(d) { return d.year; })
         .entries(filtered);
-   // console.log(decade_array)
 
     var line_count = lineCount(decade_array);
 
@@ -124,50 +123,12 @@ d3.csv('../us_temp_all.csv', function(data) {
     }
 
     // Group by decade
-    var decades = d3.nest()
-        .key(function(d) { return d.decade; })
-        .entries(decade_array);
-
-    var decade_numbers = decade_listings();
-
-    decades.forEach(function(d) {
-        d.values.forEach(function(e) {
-            e.values.forEach(function(g) {
-                decade_numbers[e.decade].month_totals[g.month] += g.anomaly;
-            });
-        });
-    });
-
-    for (var prop in decade_numbers) {
-        for(var months in decade_numbers[prop]) {
-            for(var month_values in decade_numbers[prop][months]) {
-                decade_numbers[prop][months][month_values] =
-                    (decade_numbers[prop][months][month_values] / decade_numbers[prop].counts).toFixed(1)
-            }
-        }
-    }
-
+    var decade_numbers = decadeNumbers();
     // Nest values like d3.nest()
-    var decade_array = [];
-    for(var dec in decade_numbers) {
-        var anoms = [];
-        for(var vals in decade_numbers[dec].month_totals) {
-            anoms.push({month: vals, anomaly: decade_numbers[dec].month_totals[vals] });
-        }
-
-        var averages_list = _.pluck(anoms, 'anomaly');
-        var sum = _.reduce(averages_list, function(memo, num){ return +memo + +num; });
-        var averages = (sum/ averages_list.length).toFixed(1);
-        decade_array.push({ key: dec, anomaly_avg: averages, values: _.sortByOrder(anoms, ['month'], ['asc']) });
-    }
+    var decade_array = decadeArray();
 
     // Figure out Y scale
-    var anomaly_values = [];
-    for(var m=0; m<decade_array.length; m++) {
-        anomaly_values.push(_.pluck(decade_array[m].values, 'anomaly'));
-    }
-
-    var merged = [].concat.apply([], anomaly_values); console.log(d3.extent(merged, function(d) { return +d }).reverse())
+    var merged = y_scale_anomalies();
     yScale.domain(d3.extent(merged, function(d) { return +d }).reverse());
 
     var svg_decades = axises("#avg_temps_decade");
@@ -179,6 +140,11 @@ d3.csv('../us_temp_all.csv', function(data) {
             .attr("class", "decade_lines")
             .attr("id", "decade_" + t)
             .attr("transform", "translate(" + margins.left + "," + margins.top + ")")
+            .style('stroke', function(d) {
+                if(decade_array[t].anomaly_avg >= 0.5) {
+                    return 'red';
+                }
+            })
             .on("mouseover", function(d) {
                 var self = d3.select(this);
                 var line_value = line_id(self.attr('id'));
@@ -218,7 +184,7 @@ d3.csv('../us_temp_all.csv', function(data) {
                 var line_value = line_id(self.attr('id'));
 
                 self.style('stroke', function(d) {
-                    if(line_value >= (line_count - 11)) {
+                    if(decade_array[line_value].anomaly_avg >= 0.5) {
                         return 'red';
                     } else {
                         return 'lightgray';
@@ -228,7 +194,7 @@ d3.csv('../us_temp_all.csv', function(data) {
                 div.transition()
                     .duration(500)
                     .style("opacity", 0);
-            });;
+            });
     }
 
     // Update everything
@@ -236,6 +202,8 @@ d3.csv('../us_temp_all.csv', function(data) {
         var selected_state_name = this.options[this.selectedIndex].innerHTML;
         var state = d3.select(this);
         var state_val = state.property("value");
+        
+        // Year values
         var new_filtered = sorted.filter(function(d) {
             return d.state == state_val;
         });
@@ -245,18 +213,32 @@ d3.csv('../us_temp_all.csv', function(data) {
             .entries(new_filtered);
 
         decade_array = avg_anomalies(decade_array);
-
-    //    xScale.domain(d3.extent(new_filtered, function(d) { return parse_date(d.month); }));
         yScale.domain(d3.extent(new_filtered, function(d) { return d.anomaly; }).reverse());
 
-   //     d3.select("g.x").transition().duration(1000).ease("sin-in-out").call(xAxis);
-        d3.select("g.y").transition().duration(1000).ease("sin-in-out").call(yAxis);
+        d3.select("#avg_temps g.y").transition().duration(1000).ease("sin-in-out").call(yAxis);
 
         for(var i=0; i<line_count; i++) {
             d3.select("#year_" + i).transition()
                 .duration(1400)
                 .ease("sin-in-out")
                 .attr("d", anomaly(decade_array[i].values));
+        }
+
+        // Group by decade
+        decade_numbers = decadeNumbers();
+        // Nest values like d3.nest()
+        decade_array = decadeArray();
+
+        // Figure out Y scale
+        merged = y_scale_anomalies();
+        yScale.domain(d3.extent(merged, function(d) { return +d }).reverse());
+        d3.select("#avg_temps_decade g.y").transition().duration(1000).ease("sin-in-out").call(yAxis);
+
+        for(var n=0; n<decade_array.length; n++) {
+            d3.select("#decade_" + n).transition()
+                .duration(1400)
+                .ease("sin-in-out")
+                .attr("d", anomaly(decade_array[n].values));
         }
 
         d3.selectAll(".selected_state").text(selected_state_name);
@@ -314,6 +296,59 @@ d3.csv('../us_temp_all.csv', function(data) {
         };
 
         return decade_numbers;
+    }
+
+    function decadeNumbers() {
+        var decades = d3.nest()
+            .key(function(d) { return d.decade; })
+            .entries(decade_array);
+
+        var decade_numbers = decade_listings();
+
+        decades.forEach(function(d) {
+            d.values.forEach(function(e) {
+                e.values.forEach(function(g) {
+                    decade_numbers[e.decade].month_totals[g.month] += g.anomaly;
+                });
+            });
+        });
+
+        for (var prop in decade_numbers) {
+            for(var months in decade_numbers[prop]) {
+                for(var month_values in decade_numbers[prop][months]) {
+                    decade_numbers[prop][months][month_values] =
+                        (decade_numbers[prop][months][month_values] / decade_numbers[prop].counts).toFixed(1)
+                }
+            }
+        }
+
+        return decade_numbers;
+    }
+
+    function decadeArray() {
+        var decade_array = [];
+        for(var dec in decade_numbers) {
+            var anoms = [];
+            for(var vals in decade_numbers[dec].month_totals) {
+                anoms.push({month: vals, anomaly: decade_numbers[dec].month_totals[vals] });
+            }
+
+            var averages_list = _.pluck(anoms, 'anomaly');
+            var sum = _.reduce(averages_list, function(memo, num){ return +memo + +num; });
+            var averages = (sum/ averages_list.length).toFixed(1);
+            decade_array.push({ key: dec, anomaly_avg: averages, values: _.sortByOrder(anoms, ['month'], ['asc']) });
+        }
+
+        return decade_array;
+    }
+
+    function y_scale_anomalies() {
+        var anomaly_values = [];
+        for(var m=0; m<decade_array.length; m++) {
+            anomaly_values.push(_.pluck(decade_array[m].values, 'anomaly'));
+        }
+
+        return [].concat.apply([], anomaly_values);
     }
 
  /*   d3.select("#recent").on('click', function(d) {
