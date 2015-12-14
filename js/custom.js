@@ -235,7 +235,12 @@ d3.csv('../us_temp_all.csv', function(data) {
             d3.select("#decade_" + n).transition()
                 .duration(1400)
                 .ease("sin-in-out")
-                .attr("d", anomaly(decade_array[n].values));
+                .attr("d", anomaly(decade_array[n].values))
+                .style('stroke', function(d) {
+                    if(decade_array[n].anomaly_avg >= 0.5) {
+                        return 'red';
+                    }
+                });
         }
 
         d3.selectAll(".selected_state").text(selected_state_name);
