@@ -54,7 +54,7 @@ $state_list = array(
     'WI' => 47,
     'WY' => 48
 );
-/*
+
 foreach($state_list as $state => $code) {
     foreach($months as $month) {
         if($month < 10) { $month = "0" . $month; }
@@ -106,9 +106,9 @@ foreach($months as $month) {
 
     echo $month . " processed\n";
 }
-*/
+
 // Aggregate Files
-function build($path, $states, $fh) {
+function build($path, $states, $fh, $cal_water = false) {
     foreach($states as $state_file) {
         $state_name = preg_split('/_/', $state_file)[0];
         if (($handle = fopen($path . $state_file, "r")) !== FALSE) {
@@ -120,8 +120,10 @@ function build($path, $states, $fh) {
                     $data[3] = $month;
                     $data[4] = $state_name;
 
-                    if($year != 2015) {
-                        fputcsv($fh, $data);
+                    if($year != 2016) {
+                        if(!$cal_water || ($cal_water && $state_name == 'CA')) {
+                            fputcsv($fh, $data);
+                        }
                     }
                 }
             }
@@ -134,10 +136,14 @@ function build($path, $states, $fh) {
 
 $state_files = scandir('state_data/temp');
 $us_files = scandir('us_data/temp');
+//$cal_water = scandir('state_data/precip');
 
 $fh = fopen("us_temp_all.csv", "wb");
+//$fg = fopen("cal_water.csv", "wb");
 fputcsv($fh, ['year', 'value', 'anomaly', 'month', 'state']);
 
 build("state_data/temp/", $state_files, $fh);
 build("us_data/temp/", $us_files, $fh);
+//build("state_data/precip/", $cal_water, $fg, true);
 fclose($fh);
+//fclose($fg);
