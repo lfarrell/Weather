@@ -49,7 +49,7 @@ d3.csv('../us_temp_all.csv', function(data) {
          .orient("left");
 
     var anomaly = d3.svg.line()
-         .interpolate("basis")
+         .interpolate("monotone")
          .x(function(d) { return xScale(parse_date(d.month)); })
          .y(function(d) { return yScale(d.anomaly); });
 
