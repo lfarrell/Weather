@@ -49,6 +49,7 @@ d3.csv('../us_temp_all.csv', function(data) {
          .orient("left");
 
     var anomaly = d3.svg.line()
+         .interpolate("basis")
          .x(function(d) { return xScale(parse_date(d.month)); })
          .y(function(d) { return yScale(d.anomaly); });
 
@@ -354,33 +355,6 @@ d3.csv('../us_temp_all.csv', function(data) {
 
         return [].concat.apply([], anomaly_values);
     }
-
- /*   d3.select("#recent").on('click', function(d) {
-        for(var i=0; i<line_count; i++) {
-            d3.select("#year_" + i).transition().duration(800)
-                .style('stroke', function(d) {
-                if(i >= (line_count - 11)) {
-                    return 'red';
-                } else {
-                    return 'lightgray';
-                }
-            });
-        }
-    });
-
-    d3.select("#hot").on('click', function(d) {
-        var top = _.pluck()
-        for(var i=0; i<line_count; i++) {
-            d3.select("#year_" + i).transition().duration(800)
-                .style('stroke', function(d) {
-                    if(i >= (line_count - 11)) {
-                        return 'orange';
-                    } else {
-                        return 'lightgray';
-                    }
-                });
-        }
-    }); */
 
     d3.selectAll('.row').classed('hide', false);
     d3.select('#note').classed('hide', true);
